@@ -43,6 +43,7 @@ class Message implements JsonSerializable
         return [
             'id' => $this->getId(),
             'body' => $this->getBody(),
+            'user' => $this->getUser(),
             'createdAt' => $this->getCreatedAt()
         ];
     }

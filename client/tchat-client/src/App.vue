@@ -6,10 +6,10 @@
     </div>
     <div class="wrapper">
       <h1>Messages du tchat</h1>
-      <div class="messages">
+      <div class="messages" v-if="messages.length > 0">
         <div class="msg" v-for="msg in messages" :key="msg.id">
           {{ msg.body }}
-          <small>published by {{ msg.user }} at {{ msg.createdAt }}</small>
+          <small>published by {{ msg.user }} at {{ msg.createdAt.date }}</small>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@ const $axios = axios.create({
   },
   mode: 'no-cors',
 });
-const hub_url = 'http://192.168.0.44:3000/hub';
+const hub_url = 'http://127.0.0.1:3000/hub';
 const api_url = 'http://127.0.0.1:8000/tchat';
 
 export default {
@@ -51,9 +51,9 @@ export default {
     eventSource.onmessage = e => {
       // Will be called every time an update is published by the server
       console.log(e, JSON.parse(e.data));
-      const data = JSON.parse(e.data);
-      if(data.message) {
-        this.messages.push(data.message);
+      const message = JSON.parse(e.data);
+      if(message) {
+        this.messages.push(message);
       }
     };
   },
@@ -99,6 +99,18 @@ export default {
 .messages {
   background-color: lightgrey;
   padding: 20px 20px;
+}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2em;
+  border-bottom: 1px solid grey;
+  padding: 15px 10px;
+}
+
+.msg > small {
+  font-size: 0.6em;
 }
 
 </style>

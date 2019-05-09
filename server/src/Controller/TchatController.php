@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TchatController extends AbstractController
 {
     /**
-     * @Route("/tchat", name="tchat", methods={"POST"})
+     * @Route("/tchat", name="tchat", methods={"OPTIONS", "POST"})
      */
     public function updateTchat(Publisher $publisher, Request $req)
     {
