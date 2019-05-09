@@ -9,6 +9,10 @@
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
+        "symfony/maker-bundle": "^1.11",
+        "symfony/mercure-bundle": "^0.1.1",
+        "symfony/orm-pack": "^1.0",
+        "symfony/security-bundle": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
     "config": {
@@ -52,7 +56,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": "true",
             "require": "4.2.*"
         }
     }
