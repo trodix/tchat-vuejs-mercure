@@ -29,15 +29,14 @@ class Message
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="messages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tchat", inversedBy="messages")
-     */
-    private $tchat;
+
+    public function __construct() {
+        $this->setCreatedAt(new \DateTime());
+    }
 
     public function getId(): ?int
     {
@@ -68,27 +67,27 @@ class Message
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?string
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?string $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getTchat(): ?Tchat
-    {
-        return $this->tchat;
-    }
+    // public function getTchat(): ?Tchat
+    // {
+    //     return $this->tchat;
+    // }
 
-    public function setTchat(?Tchat $tchat): self
-    {
-        $this->tchat = $tchat;
+    // public function setTchat(?Tchat $tchat): self
+    // {
+    //     $this->tchat = $tchat;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

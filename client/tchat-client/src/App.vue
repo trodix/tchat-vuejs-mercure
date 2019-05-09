@@ -2,49 +2,77 @@
   <div id="app">
     <div id="output"></div>
     <button @click.prevent="getUpdate()">Get update</button>
+    <div class="input">
+      <input type="text" v-model="newMsg.body" placeholder="your message">
+      <button @click.prevent="sendMsg()">Send</button>
+    </div>
+    <h1>Messages du tchat</h1>
+    <div class="messages">
+      <div class="msg" v-for="msg in messages" :key="msg.id">
+        {{ msg.body }}
+        <small>published by {{ msg.user }} at {{ msg.createdAt }}</small>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+const $axios = axios.create({
+  headers: {
+    //'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json;charset=UTF-8',
+  },
+  mode: 'no-cors',
+});
+const hub_url = 'http://192.168.0.44:3000/hub';
+const api_url = 'http://127.0.0.1:8000/tchat';
 
 export default {
   name: 'app',
   data() {
     return {
-
+      messages: [],
+      newMsg: {
+        body: "",
+        user: "Sébastien Vallet"
+      }
     }
   },
   created() {
-    const url = new URL('http://192.168.0.38:3000/hub');
-    url.searchParams.append('topic', 'http://localhost:8000/tchat'); // sujet à écouter
+    const url = new URL(hub_url);
+    url.searchParams.append('topic', api_url); // sujet à écouter
 
-    const eventSource = new EventSource(url, {withCredentials: true});
+    const eventSource = new EventSource(url, {withCredentials: false});
 
     // The callback will be called every time an update is published
     //eventSource.onmessage = e => console.log(e); // do something with the payload
 
     eventSource.onmessage = e => {
-        // Will be called every time an update is published by the server
-        console.log(JSON.parse(e.data));
-        const data = JSON.parse(e.data);
-        if(data.status) {
-            document.querySelector('#output').innerHTML = `Data: ${data}`;
-        }
+      // Will be called every time an update is published by the server
+      console.log(e, JSON.parse(e.data));
+      const data = JSON.parse(e.data);
+      if(data.message) {
+          this.messages.push(data.message);
+      }
     };
   },
   methods: {
     getUpdate() {
-      const init = { 
-        method: 'POST',
-        mode: 'no-cors',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.NFCEbEEiI7zUxDU2Hj0YB71fQVT8YiQBGQWEyxWG0po",
-        }
-    };
+      $axios.post(api_url).then((data) => {
+        console.log(`#success: ${data}`);
+      }).catch((err) => {
+        console.log(`#error: ${err.message}`);
+      }) ;
+    },
+    sendMsg() {
+      const data = (JSON.stringify(this.newMsg));
 
-    fetch(`http://localhost:8000/tchat`, init);
+      $axios.post(api_url, data).then((data) => {
+        console.log(`#success: ${data}`);
+      }).catch((err) => {
+        console.log(`#error: ${err.message}`);
+      });
     }
   },
 }
@@ -58,5 +86,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.input {
+  margin: 20px auto;
+  display: flex;
+  flex-direction: row;
 }
 </style>
