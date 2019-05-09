@@ -53,7 +53,7 @@ export default {
       console.log(e, JSON.parse(e.data));
       const data = JSON.parse(e.data);
       if(data.message) {
-          this.messages.push(data.message);
+        this.messages.push(data.message);
       }
     };
   },

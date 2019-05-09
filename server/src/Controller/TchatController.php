@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TchatController extends AbstractController
@@ -19,17 +20,19 @@ class TchatController extends AbstractController
      */
     public function updateTchat(Publisher $publisher, Request $req)
     {
-        $serializer = new Serializer();
+        $jsonEncoder = new JsonEncoder();
         $entityManager = $this->getDoctrine()->getManager();
         
         //$tchat1 = new Tchat();
         $msg = new Message();
 
-        $body = $req->request->get('body');
-        $user = $req->request->get('user');
+        $body = $req->request->get("body");
+        $user = $req->request->get("user");
 
         if (null === $body || null === $user || empty($body) || empty($user)) {
-            dump($req);
+            dump($req->request);
+            dump($body);
+            dump($user);
             return new Response(400);
         }
 
@@ -41,9 +44,9 @@ class TchatController extends AbstractController
         $entityManager->persist($msg);
         $entityManager->flush();
 
-        $update = new Update("http://192.168.0.40:8000/tchat", $serializer->serialize($msg, 'json'));
+        $update = new Update("http://127.0.0.1:8000/tchat", $jsonEncoder->encode($msg, 'json'));
         $publisher($update);
 
-        return $this->json(["/tchat" => "published"], 200);
+        return $this->json(["action" => "published"], 200);
     }
 }
