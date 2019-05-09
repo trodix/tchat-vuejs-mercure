@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -9,7 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(mercure=true)
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
-class Message
+class Message implements JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -36,6 +37,14 @@ class Message
 
     public function __construct() {
         $this->setCreatedAt(new \DateTime());
+    }
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'body' => $this->getBody(),
+            'createdAt' => $this->getCreatedAt()
+        ];
     }
 
     public function getId(): ?int

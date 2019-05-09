@@ -44,7 +44,9 @@ class TchatController extends AbstractController
         $entityManager->persist($msg);
         $entityManager->flush();
 
-        $update = new Update("http://127.0.0.1:8000/tchat", $jsonEncoder->encode($msg, 'json'));
+        $jsonData = $jsonEncoder->encode($msg->jsonSerialize(), 'json');
+
+        $update = new Update("http://127.0.0.1:8000/tchat", $jsonData);
         $publisher($update);
 
         return $this->json(["action" => "published"], 200);

@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <div id="output"></div>
-    <button @click.prevent="getUpdate()">Get update</button>
     <div class="input">
       <input type="text" v-model="newMsg.body" placeholder="your message">
       <button @click.prevent="sendMsg()">Send</button>
     </div>
-    <h1>Messages du tchat</h1>
-    <div class="messages">
-      <div class="msg" v-for="msg in messages" :key="msg.id">
-        {{ msg.body }}
-        <small>published by {{ msg.user }} at {{ msg.createdAt }}</small>
+    <div class="wrapper">
+      <h1>Messages du tchat</h1>
+      <div class="messages">
+        <div class="msg" v-for="msg in messages" :key="msg.id">
+          {{ msg.body }}
+          <small>published by {{ msg.user }} at {{ msg.createdAt }}</small>
+        </div>
       </div>
     </div>
   </div>
@@ -58,13 +58,6 @@ export default {
     };
   },
   methods: {
-    getUpdate() {
-      $axios.post(api_url).then((data) => {
-        console.log(`#success: ${data}`);
-      }).catch((err) => {
-        console.log(`#error: ${err.message}`);
-      }) ;
-    },
     sendMsg() {
       const data = (JSON.stringify(this.newMsg));
 
@@ -92,4 +85,20 @@ export default {
   display: flex;
   flex-direction: row;
 }
+</style>
+
+<style scope>
+.wrapper {
+  min-height: 200px;
+  min-width: 200px;
+  max-width: 400px;  
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  background-color: lightgrey;
+  padding: 20px 20px;
+}
+
 </style>
