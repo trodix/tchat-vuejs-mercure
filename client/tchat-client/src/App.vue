@@ -20,7 +20,7 @@
 import axios from 'axios';
 const $axios = axios.create({
   headers: {
-    //'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': 'http://127.0.0.1:8080,http://192.168.0.40:8080',
     'Content-Type': 'application/json;charset=UTF-8',
   },
   mode: 'no-cors',

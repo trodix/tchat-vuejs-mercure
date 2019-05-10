@@ -30,10 +30,10 @@ class TchatController extends AbstractController
         $user = $req->request->get("user");
 
         if (null === $body || null === $user || empty($body) || empty($user)) {
-            dump($req->request);
-            dump($body);
-            dump($user);
-            return new Response(400);
+            // dump($req->request);
+            // dump($body);
+            // dump($user);
+            return new Response("Data request null or empty", 400);
         }
 
         $msg
@@ -49,6 +49,6 @@ class TchatController extends AbstractController
         $update = new Update("http://127.0.0.1:8000/tchat", $jsonData);
         $publisher($update);
 
-        return $this->json(["action" => "published"], 200);
+        return $this->json(["action" => "published", "data" => $jsonData], 200);
     }
 }
