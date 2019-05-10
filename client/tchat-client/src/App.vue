@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div class="container tchat">
+      <h1>My super tchat</h1>
       <div class="toolbar">
         <input type="text" v-model="newMsg.user" placeholder="your username">
         <div class="input-message">
@@ -9,7 +10,7 @@
         </div>
       </div>
       <div class="wrapper">
-        <h1>Messages du tchat</h1>
+        <h2>Messages du tchat</h2>
         <div class="messages">
           <div class="msg" v-for="msg in messages" :key="msg.id">
             <div class="msg-content">
@@ -99,18 +100,21 @@ export default {
   min-width: 250px;
 }
 .tchat {
-  background-color: #ff8f00;
+  background-color: #86C655;
   color: black;
   padding: 10px 10px;
   display: flex;
   flex-direction: column;
-  border: 2px solid dimgray;
+  border: 2px solid black;
+  border-radius: 5px;
+  max-width: 420px;
 }
 .toolbar {
   display: flex;
   flex-direction: column;
-  margin: 20px 5px;
-  max-width: 400px;  
+  padding: 20px 15px;
+  max-width: 400px;
+  background-color: #6fa843
 }
 .input-message {
   margin: 20px 5px;
@@ -127,11 +131,12 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
-h1 {
-  font-size: 1.5em;
+h1, h2 {
   text-align: center;
   color: #fafafa;
+}
+h2 {
+  font-size: 1.5em;
 }
 
 .messages {
@@ -139,6 +144,8 @@ h1 {
   padding: 10px 10px;
   max-height: 300px;
   height: 300px;
+  max-width: 400px;
+  width: 100%;
   overflow-y: scroll;
 }
 
@@ -167,7 +174,7 @@ input {
 }
 
 button {
-  background-color: rgb(43, 180, 54);
+  background-color: #2367f8;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
