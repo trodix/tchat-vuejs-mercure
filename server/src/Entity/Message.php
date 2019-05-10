@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
- * @ApiResource(mercure=true)
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
 class Message implements JsonSerializable
