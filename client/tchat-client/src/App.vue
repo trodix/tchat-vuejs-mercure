@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <input type="text" v-model="newMsg.user" placeholder="your username">
     <div class="input">
       <input type="text" v-model="newMsg.body" placeholder="your message">
       <button @click.prevent="sendMsg()">Send</button>
@@ -25,8 +26,9 @@ const $axios = axios.create({
   },
   mode: 'no-cors',
 });
-const hub_url = 'http://127.0.0.1:3000/hub';
-const api_url = 'http://127.0.0.1:8000/tchat';
+const hub_url = 'http://192.168.0.44:3000/hub';
+const api_url = 'http://192.168.0.40:8000/tchat';
+const topic   = 'http://192.168.0.40:8000/tchat';
 
 export default {
   name: 'app',
@@ -35,13 +37,13 @@ export default {
       messages: [],
       newMsg: {
         body: "",
-        user: "Sébastien Vallet"
+        user: ""
       }
     }
   },
   created() {
     const url = new URL(hub_url);
-    url.searchParams.append('topic', api_url); // sujet à écouter
+    url.searchParams.append('topic', topic); // sujet à écouter
 
     const eventSource = new EventSource(url, {withCredentials: false});
 
@@ -59,10 +61,13 @@ export default {
   },
   methods: {
     sendMsg() {
+      if (this.newMsg.user == "") {
+        this.newMsg.user = "Unknown user"
+      }
       const data = (JSON.stringify(this.newMsg));
 
-      $axios.post(api_url, data).then((data) => {
-        console.log(`#success: ${data}`);
+      $axios.post(api_url, data).then((res) => {
+        console.log(`#success: ${res}`)
       }).catch((err) => {
         console.log(`#error: ${err.message}`);
       });

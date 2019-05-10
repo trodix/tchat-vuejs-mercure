@@ -8,9 +8,9 @@ const EventSource = require('eventsource');
 // app.listen(2000);
 
 const hub_url = 'http://192.168.0.44:3000/hub';
-const api_url = 'http://127.0.0.1:8000/tchat';
+const topic = 'http://192.168.0.40:8000/tchat';
 
-const url = hub_url + '?topic=' + api_url; // sujet à écouter
+const url = hub_url + '?topic=' + topic; // sujet à écouter
 
 const eventSource = new EventSource(url, {withCredentials: false});
 console.log(`### Event source listening for topic ${url}`),
