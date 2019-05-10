@@ -1,16 +1,22 @@
 <template>
   <div id="app">
-    <input type="text" v-model="newMsg.user" placeholder="your username">
-    <div class="input">
-      <input type="text" v-model="newMsg.body" placeholder="your message">
-      <button @click.prevent="sendMsg()">Send</button>
-    </div>
-    <div class="wrapper">
-      <h1>Messages du tchat</h1>
-      <div class="messages" v-if="messages.length > 0">
-        <div class="msg" v-for="msg in messages" :key="msg.id">
-          {{ msg.body }}
-          <small>published by {{ msg.user }} at {{ msg.createdAt.date }}</small>
+    <div class="container tchat">
+      <div class="toolbar">
+        <input type="text" v-model="newMsg.user" placeholder="your username">
+        <div class="input-message">
+          <input type="text" v-model="newMsg.body" placeholder="your message">
+          <button @click.prevent="sendMsg()">Send</button>
+        </div>
+      </div>
+      <div class="wrapper">
+        <h1>Messages du tchat</h1>
+        <div class="messages">
+          <div class="msg" v-for="msg in messages" :key="msg.id">
+            <div class="msg-content">
+              {{ msg.body }}
+            </div>
+            <small>published by {{ msg.user }} at {{ msg.createdAt.date }}</small>
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +71,7 @@ export default {
         this.newMsg.user = "Unknown user"
       }
       const data = (JSON.stringify(this.newMsg));
+      this.newMsg.body = "";
 
       $axios.post(api_url, data).then((res) => {
         console.log(`#success: ${res}`)
@@ -81,18 +88,38 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-.input {
-  margin: 20px auto;
-  display: flex;
-  flex-direction: row;
 }
 </style>
 
 <style scope>
+.container {
+  margin: 10px 15px;
+  min-width: 250px;
+}
+.tchat {
+  background-color: #ff8f00;
+  color: black;
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid dimgray;
+}
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 5px;
+  max-width: 400px;  
+}
+.input-message {
+  margin: 20px 5px;
+  display: flex;
+  flex-direction: row;
+}
+.input-message > input {
+  width: 100%;
+}
 .wrapper {
   min-height: 200px;
   min-width: 200px;
@@ -101,21 +128,51 @@ export default {
   flex-direction: column;
 }
 
+h1 {
+  font-size: 1.5em;
+  text-align: center;
+  color: #fafafa;
+}
+
 .messages {
-  background-color: lightgrey;
-  padding: 20px 20px;
+  background-color: #fafafa;
+  padding: 10px 10px;
+  max-height: 300px;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 .msg {
   display: flex;
   flex-direction: column;
-  font-size: 1.2em;
   border-bottom: 1px solid grey;
   padding: 15px 10px;
 }
 
+.msg-content {
+  font-size: 1.2em;
+}
+
 .msg > small {
-  font-size: 0.6em;
+  font-size: 0.5em;
+  color: grey;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+input {
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+}
+
+button {
+  background-color: rgb(43, 180, 54);
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 </style>
