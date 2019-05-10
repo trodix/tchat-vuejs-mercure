@@ -10,8 +10,10 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class TchatController extends AbstractController
 {
@@ -22,33 +24,39 @@ class TchatController extends AbstractController
     {
         $jsonEncoder = new JsonEncoder();
         $entityManager = $this->getDoctrine()->getManager();
+        $topic = "http://192.168.0.40:8000/tchat";
+
+        $data = json_decode(
+            $req->getContent(),
+            true
+        );
         
-        //$tchat1 = new Tchat();
-        $msg = new Message();
+        
 
-        $body = $req->request->get("body");
-        $user = $req->request->get("user");
-
-        if (null === $body || null === $user || empty($body) || empty($user)) {
-            // dump($req->request);
-            // dump($body);
-            // dump($user);
+        if (null === $data || empty($data)) {
+            dump($data);
             return new Response("Data request null or empty", 400);
         }
 
+        $body = $data["body"];
+        $user = $data["user"];
+
+        $msg = new Message();
         $msg
-            //->setTchat($tchat1)
             ->setBody($body)
             ->setUser($user)
         ;
+
         $entityManager->persist($msg);
         $entityManager->flush();
 
         $jsonData = $jsonEncoder->encode($msg->jsonSerialize(), 'json');
 
-        $update = new Update("http://127.0.0.1:8000/tchat", $jsonData);
+        $update = new Update($topic, $jsonData);
         $publisher($update);
 
-        return $this->json(["action" => "published", "data" => $jsonData], 200);
+        return $this->json(["action" => "published", "data" => $jsonData], 200, [
+            'Content-Type', 'application/json'
+        ]);
     }
 }

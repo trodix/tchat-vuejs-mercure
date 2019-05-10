@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
-
+// use ApiPlatform\Core\Annotation\ApiResource;
+// @ApiResource(mercure=true)
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
